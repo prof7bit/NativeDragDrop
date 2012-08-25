@@ -9,13 +9,13 @@
       </SearchPaths>
       <Other>
         <CompilerMessages>
-          <IgnoredMessages idx5024="True" idx5033="True"/>
+          <IgnoredMessages idx5024="True" idx5033="True" idx6018="True"/>
           <MsgFileName Value=""/>
         </CompilerMessages>
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Files Count="5">
+    <Files Count="6">
       <Item1>
         <Filename Value="nativednd.pas"/>
         <HasRegisterProc Value="True"/>
@@ -40,6 +40,11 @@
         <AddToUsesPkgSection Value="False"/>
         <UnitName Value="DragDropWin32"/>
       </Item5>
+      <Item6>
+        <Filename Value="dragdropqt4.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="DragDropQt4"/>
+      </Item6>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="1">

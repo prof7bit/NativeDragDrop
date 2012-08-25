@@ -1,4 +1,4 @@
-{ native DnD using the GTLK2 API
+{ native DnD using the GTK2 API
 
   Copyright (C) 2012 Bernd Kreuss <prof7bit@gmail.com>
 

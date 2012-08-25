@@ -111,6 +111,7 @@ uses
   DragDropDummy,
   {$ifdef LCLGTK2}DragDropGtk2,{$endif}
   {$ifdef LCLWIN32}DragDropWin32,{$endif}
+  {$ifdef LCLQT}DragDropQt4,{$endif}
   typinfo,
   LResources;
 

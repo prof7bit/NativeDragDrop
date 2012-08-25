@@ -46,12 +46,12 @@
   supply are expected to be UTF8 encoded.
 
   This is not yet complete, features are still
-  missing and also it works only with GTK2 and
-  Win32 at the moment. I started this as a quick
-  and pragmatic hack to make my application work.
-  Ideally at some later time all the methods and
-  properties of this component should be made a
-  part of the LCL TWinControl class itself.
+  missing and also it works only with GTK2, Qt4
+  and Win32 at the moment. I started this as a
+  quick and pragmatic hack to make my application
+  work. Ideally at some later time all the methods
+  and properties of this component should be made
+  a part of the LCL TWinControl class itself.
 }
 unit NativeDnD;
 

@@ -22,8 +22,8 @@ their default values (DragMode:=dmManual) so that LCL would not
 attempt to invoke its own proprietary internal dragdrop procedure.
 
 Implement one (or more) of the OnDragGetXxxx events. Which ones you
-implement will deterimine which kind of data will be advertised to
-the target platform. The drop target will choose one of these formats
+implement will deterimine which kind of data will be advertised to the
+target application. The drop target will choose one of these formats
 (if it supports it) and then call the corresponding OnDragGetXxx.
 
 The drag sorce component will listen to OnMouseDown and OnMouseMove

@@ -35,8 +35,8 @@
   If the event method is called then fill the
   supplied variable with data (for example add
   file names to the FileList). Note that these
-  event methods may get called multiple times
-  even before the drag operation is completed.
+  event methods may get called even before the
+  drag operation is completed.
 
   It will only work if you set the control that
   you want to act as source to DragMode=dmManual,
@@ -83,6 +83,7 @@ type
     FOldMouseMove: TMouseMoveEvent;
     FMouseDownPos: TPoint;
     FIsDragging: Boolean;
+    FFileListCache: TStringList;
     procedure UnsetControl;
     procedure SetControl(AControl: TWinControl);
     procedure MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -93,7 +94,7 @@ type
     InternalData: TObject; // widgetset code may store internal stuff here
     procedure CallOnDragBegin;
     procedure CallOnDragEnd;
-    procedure CallOnDragGetFileList(FileList: TStringList);
+    function CallOnDragGetFileList: TStringList;
     procedure CallOnDragStringData(out StringData: UTF8String);
     property IsDragging: Boolean read FIsDragging;
   published
@@ -127,6 +128,7 @@ begin
   FEndEvent := nil;
   FMouseDownPos := Point(-1, -1);
   FIsDragging := False;
+  FFileListCache := nil;
 end;
 
 procedure TNativeDragSource.UnsetControl;
@@ -202,10 +204,14 @@ begin
     OnDragBegin(Control, FMouseDownPos.X, FMouseDownPos.Y);
 end;
 
-procedure TNativeDragSource.CallOnDragGetFileList(FileList: TStringList);
+function TNativeDragSource.CallOnDragGetFileList: TStringList;
 begin
-  if Assigned(OnDragGetFileList) then
-    OnDragGetFileList(Control, FileList);
+  if not Assigned(FFileListCache) then begin
+    FFileListCache := TStringList.Create;
+    if Assigned(OnDragGetFileList) then
+      OnDragGetFileList(Control, FFileListCache);
+  end;
+  Result := FFileListCache;
 end;
 
 procedure TNativeDragSource.CallOnDragStringData(out StringData: UTF8String);
@@ -219,6 +225,10 @@ begin
   FIsDragging := False;
   if Assigned(OnDragEnd) then
     OnDragEnd(Control);
+  if Assigned(FFileListCache) then begin
+    FFileListCache.Free;
+    FFileListCache := nil;
+  end;
 end;
 
 procedure Register;

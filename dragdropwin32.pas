@@ -181,8 +181,7 @@ begin
     case formatetcIn.CfFormat of
       CF_HDROP:
       begin
-        FileList := TStringList.Create;
-        FSrc.CallOnDragGetFileList(FileList);
+        FileList := FSrc.CallOnDragGetFileList;
 
         // First we need a widestring #0 sepatated and #0#0 at the end.
         WideStringData := '';
@@ -190,7 +189,6 @@ begin
           WideStringData += UTF8Decode(FileName) + WideChar(0);
         end;
         WideStringData += WideChar(0);
-        FileList.Free;
 
         // now we need to allocate memory for a DROPFILES structure.
         // we need room for that structure plus the above widestring

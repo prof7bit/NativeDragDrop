@@ -178,16 +178,20 @@ end;
 
 procedure TNativeDragSource.InstallMouseRedirection;
 begin
-  FOldMouseDown := TMouseEvent(GetMethodProp(Control, 'OnMouseDown'));
-  FOldMouseMove := TMouseMoveEvent(GetMethodProp(Control, 'OnMouseMove'));
-  SetMethodProp(Control, 'OnMouseMove', TMethod(@MouseMove));
-  SetMethodProp(Control, 'OnMouseDown', TMethod(@MouseDown));
+  if DRAG_SOURCE_IMPLEMENTED then begin
+    FOldMouseDown := TMouseEvent(GetMethodProp(Control, 'OnMouseDown'));
+    FOldMouseMove := TMouseMoveEvent(GetMethodProp(Control, 'OnMouseMove'));
+    SetMethodProp(Control, 'OnMouseMove', TMethod(@MouseMove));
+    SetMethodProp(Control, 'OnMouseDown', TMethod(@MouseDown));
+  end;
 end;
 
 procedure TNativeDragSource.UninstallMouseRedirection;
 begin
-  SetMethodProp(Control, 'OnMouseMove', TMethod(FOldMouseMove));
-  SetMethodProp(Control, 'OnMouseDown', TMethod(FOldMouseDown));
+  if DRAG_SOURCE_IMPLEMENTED then begin
+    SetMethodProp(Control, 'OnMouseMove', TMethod(FOldMouseMove));
+    SetMethodProp(Control, 'OnMouseDown', TMethod(FOldMouseDown));
+  end;
 end;
 
 procedure TNativeDragSource.CallOnDragBegin;

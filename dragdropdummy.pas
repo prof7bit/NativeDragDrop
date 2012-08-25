@@ -40,6 +40,10 @@ interface
 uses
   NativeDnD;
 
+const
+  DRAG_SOURCE_IMPLEMENTED = False;
+  DROP_TARGET_IMPLEMENTED = False;
+
 procedure StartDrag(Src: TNativeDragSource);
 
 

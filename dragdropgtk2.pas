@@ -44,6 +44,9 @@ interface
 uses
   NativeDnD;
 
+const
+  DRAG_SOURCE_IMPLEMENTED = True;
+
 procedure StartDrag(Src: TNativeDragSource); // need this in some cases
 
 

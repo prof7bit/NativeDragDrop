@@ -5,6 +5,9 @@ This is a Lazarus package with a component that can act as a drag source
 for drag-drop to other applications. Its using the widgetset API to
 access the underlying platform DnD protocol.
 
+The license is LGPL with static linking exception, so it can be used like
+any other LCL component or maybe one day even included in Lazarus itself.
+
 Currently implemented widgetsets:
   * Gtk2
   * Win32

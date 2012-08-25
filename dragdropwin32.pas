@@ -148,7 +148,7 @@ end;
 function TDataObject.GetData(const formatetcIn: FORMATETC; out medium: STGMEDIUM): HRESULT; STDCALL;
 var
   FileList: TStringList;       // Filenames must be UTF8 encoded
-  FileName: String;
+  FileName: UTF8String;
   BufLen: PtrInt;
   hgDropFiles: THANDLE;
   pgDropFiles: PDROPFILES;

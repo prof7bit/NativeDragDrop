@@ -166,7 +166,7 @@ var
       medium.Tymed := TYMED_HGLOBAL;
       medium.HGLOBAL := Handle;
       medium.PUnkForRelease := nil;
-      Result := S_OK;
+      GetData := S_OK;
     end;
   end;
 

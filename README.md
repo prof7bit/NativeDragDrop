@@ -32,7 +32,7 @@ will take modal mouse control until the drag/drop operation ends.
 
 Example
 -------
-Here is how to drag files. Of Course this is a stupid example but it
+Here is how to drag files. Of course this is a stupid example but it
 demonstrates how the data is expected to look like.
 
     procedure TForm1.DSDragGetFileList(Sender: TObject; FileList: TStringList);

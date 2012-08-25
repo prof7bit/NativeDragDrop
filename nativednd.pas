@@ -108,11 +108,11 @@ procedure Register;
 
 implementation
 uses
-  LResources,
-  typinfo,
   DragDropDummy,
-  {$ifdef LCLGTK2}DragDropGtk2;{$endif}
-  {$ifdef LCLWIN32}DragDropWin32;{$endif}
+  {$ifdef LCLGTK2}DragDropGtk2,{$endif}
+  {$ifdef LCLWIN32}DragDropWin32,{$endif}
+  typinfo,
+  LResources;
 
 { TNativeDragSource }
 

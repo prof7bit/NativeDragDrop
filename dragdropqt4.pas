@@ -29,7 +29,11 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 }
 
-{
+{ Drag/Drop implementation using the Qt4 API.
+  In this implementation the drag source will
+  ask for the data immediately at the beginning
+  of the drag/drop operation. StartDrag() will
+  block until operation is finished.
 }
 unit DragDropQt4;
 
@@ -40,17 +44,78 @@ uses
   NativeDnD;
 
 const
-  DRAG_SOURCE_IMPLEMENTED = False;
+  DRAG_SOURCE_IMPLEMENTED = True;
 
 procedure StartDrag(Src: TNativeDragSource);
 
 
 implementation
+uses
+  Classes,
+  qtwidgets,
+  qt4;
+
+{$note will this leak memory?}
 
 procedure StartDrag(Src: TNativeDragSource);
+var
+  U8Str: UTF8String;
+  WStr: WideString;
+  FileList: TStringList;
+  StrFileList: UTF8String;
+  MimeName: WideString;
+  ByteArray: QByteArrayH = nil;
+  Widget: QWidgetH;
+  Mime: QMimeDataH = nil;
+  Drag: QDragH;
+
+  function MimeObj: QMimeDataH;
+  begin
+    if not Assigned(Mime) then
+      Mime := QMimeData_create();
+    Result := Mime;
+  end;
+
 begin
-  // not implemented
+  Widget := TQtWidget(src.Control.Handle).Widget;
+
+  if Assigned(Src.OnDragGetStringData) then begin
+    Src.CallOnDragStringData(U8Str);
+    if Length(U8Str) > 0 then begin
+      WStr := UTF8Decode(U8Str);
+      QMimeData_setText(MimeObj, @WStr);
+    end;
+  end;
+
+  if Assigned(Src.OnDragGetFileList) then begin
+    FileList := TStringList.Create;
+    Src.CallOnDragGetFileList(FileList);
+    if FileList.Count > 0 then begin
+      // we don't have QMimeData_setUrls() in libQt4Pas
+      // unfortunately, so we must fiddle around with the
+      // raw data of a "text/uri-list" entry manually.
+      StrFileList := '';
+      for U8Str in FileList do begin
+        StrFileList += 'file://' + U8Str + chr(13) + chr(10);
+      end;
+      ByteArray := QByteArray_create(@StrFileList[1], Length(StrFileList));
+      MimeName := 'text/uri-list';
+      QMimeData_setData(MimeObj, @MimeName, ByteArray);
+    end;
+    FileList.Free;
+  end;
+
+  if Assigned(Mime) then begin
+    Drag := QDrag_create(Widget);
+    QDrag_setMimeData(Drag, Mime);
+    QDrag_exec(Drag, QtCopyAction);
+  end;
+
+  Src.CallOnDragEnd;
+
+  if Assigned(ByteArray) then QByteArray_destroy(ByteArray);
 end;
+
 
 end.
 

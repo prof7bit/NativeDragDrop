@@ -11,7 +11,7 @@ any other LCL component or maybe one day even included in Lazarus itself.
 Currently implemented widgetsets:
   * Gtk2
   * Win32
-
+  * Qt4
 
 Usage
 -----

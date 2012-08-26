@@ -161,6 +161,8 @@ procedure TNativeDragSource.MouseMove(Sender: TObject; Shift: TShiftState; X, Y:
 var
   DragDist: Double;
 begin
+  if IsDragging then
+    exit;
   if (FMouseDownPos.Y <> -1) and (FMouseDownPos.Y <> -1) then begin
     if ssLeft in Shift then begin
       DragDist := sqrt(sqr(X - FMouseDownPos.X) + sqr(Y - FMouseDownPos.Y));

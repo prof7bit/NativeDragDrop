@@ -83,7 +83,8 @@ var
   FileList: TStringList;
   StringData: UTF8String;
   I: Integer;
-  A: array of PChar;
+  p_names: PPgchar; // will be owned by gtk
+
 begin
   case TargetType of
     FMT_TEXT:
@@ -99,13 +100,12 @@ begin
       FileList := TStringList.Create;
       Src.CallOnDragGetFileList(FileList);
       if FileList.Count > 0 then begin
-        SetLength(A, FileList.Count);
+        p_names := g_malloc(FileList.Count * SizeOf(PChar));
         for I := 0 to FileList.Count - 1 do begin
-          FileList.Strings[I] := 'file://' + FileList.Strings[i];
-          A[i] := PChar(FileList.Strings[I]);
+          p_names[i] := g_strdup(PChar('file://' + FileList.Strings[I]));
         end;
-        A[FileList.Count] := nil;
-        gtk_selection_data_set_uris(SelData, @A[0]);
+        p_names[FileList.Count] := nil;
+        gtk_selection_data_set_uris(SelData, p_names);
       end;
       FileList.Free;
     end;

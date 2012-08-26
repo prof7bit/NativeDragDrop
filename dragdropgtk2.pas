@@ -47,6 +47,8 @@ uses
 const
   DRAG_SOURCE_IMPLEMENTED = True;
 
+procedure InitializeDragSource(Src: TNativeDragSource);
+procedure FinalizeDragSource(Src: TNativeDragSource);
 procedure StartDrag(Src: TNativeDragSource); // need this in some cases
 
 
@@ -110,7 +112,26 @@ begin
   end;
 end;
 
-procedure DisconnectSignals(Src: TNativeDragSource); cdecl;
+procedure GtkDragEnd(GtkW: PGtkWidget;
+                  Context: PGdkDragContext;
+                      Src: TNativeDragSource); cdecl;
+begin
+  Src.CallOnDragEnd;
+end;
+
+procedure InitializeDragSource(Src: TNativeDragSource);
+var
+  GtkW: PGtkWidget;
+  H: TDragSignalHandlers;
+begin
+  GtkW := PGtkWidget(Src.Control.Handle);
+  H := TDragSignalHandlers.Create;
+  Src.InternalData := H;
+  H.HDragDataGet := g_signal_connect(GtkW, 'drag-data-get', TGCallback(@GtkDragDataGet), Src);
+  H.HDragEnd := g_signal_connect(GtkW, 'drag-end', TGCallback(@GtkDragEnd), Src);
+end;
+
+procedure FinalizeDragSource(Src: TNativeDragSource);
 var
   GtkW: PGtkWidget;
   H: TDragSignalHandlers;
@@ -121,26 +142,6 @@ begin
   g_signal_handler_disconnect(GtkW, H.HDragEnd);
   H.Free;
   Src.InternalData := nil;
-end;
-
-procedure GtkDragEnd(GtkW: PGtkWidget;
-                  Context: PGdkDragContext;
-                      Src: TNativeDragSource); cdecl;
-begin
-  Src.CallOnDragEnd;
-  DisconnectSignals(Src);
-end;
-
-procedure ConnectSignals(Src: TNativeDragSource); cdecl;
-var
-  GtkW: PGtkWidget;
-  H: TDragSignalHandlers;
-begin
-  GtkW := PGtkWidget(Src.Control.Handle);
-  H := TDragSignalHandlers.Create;
-  Src.InternalData := H;
-  H.HDragDataGet := g_signal_connect(GtkW, 'drag-data-get', TGCallback(@GtkDragDataGet), Src);
-  H.HDragEnd := g_signal_connect(GtkW, 'drag-end', TGCallback(@GtkDragEnd), Src);
 end;
 
 procedure StartDrag(Src: TNativeDragSource);
@@ -168,7 +169,6 @@ begin
     AddTarget(TGT_TEXT2);
   end;
   if TargetCount > 0 then begin
-    ConnectSignals(Src);
     GtkW := PGtkWidget(Src.Control.Handle);
     gtk_drag_begin(GtkW, TargetList, GDK_ACTION_COPY, 1, nil);
   end;

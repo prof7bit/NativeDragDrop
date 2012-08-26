@@ -44,10 +44,21 @@ const
   DRAG_SOURCE_IMPLEMENTED = False;
   DROP_TARGET_IMPLEMENTED = False;
 
+procedure InitializeDragSource(Src: TNativeDragSource);
+procedure FinalizeDragSource(Src: TNativeDragSource);
 procedure StartDrag(Src: TNativeDragSource);
 
-
 implementation
+
+procedure InitializeDragSource(Src: TNativeDragSource);
+begin
+  // nothing
+end;
+
+procedure FinalizeDragSource(Src: TNativeDragSource);
+begin
+  // nothing
+end;
 
 procedure StartDrag(Src: TNativeDragSource);
 begin

@@ -83,6 +83,7 @@ type
     FOldMouseMove: TMouseMoveEvent;
     FMouseDownPos: TPoint;
     FIsDragging: Boolean;
+    FIsInitialized: Boolean;
     procedure UnsetControl;
     procedure SetControl(AControl: TWinControl);
     procedure MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -127,6 +128,7 @@ begin
   FEndEvent := nil;
   FMouseDownPos := Point(-1, -1);
   FIsDragging := False;
+  FIsInitialized := False;
 end;
 
 procedure TNativeDragSource.UnsetControl;
@@ -134,6 +136,8 @@ begin
   if FControl = nil then
     exit;
   UninstallMouseRedirection;
+  FinalizeDragSource(Self);
+  FIsInitialized := False;
   FControl := nil;
 end;
 
@@ -167,6 +171,10 @@ begin
     if ssLeft in Shift then begin
       DragDist := sqrt(sqr(X - FMouseDownPos.X) + sqr(Y - FMouseDownPos.Y));
       if DragDist > 5 then begin
+        if not FIsInitialized then begin
+          InitializeDragSource(Self);
+          FIsInitialized := True;
+        end;
         CallOnDragBegin;
         StartDrag(Self);
         FMouseDownPos := Point(-1, -1);

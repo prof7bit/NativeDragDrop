@@ -83,7 +83,7 @@ var
   FileList: TStringList;
   StringData: UTF8String;
   I: Integer;
-  p_names: PPgchar; // will be owned by gtk
+  p_names: PPgchar;
 
 begin
   case TargetType of
@@ -106,6 +106,7 @@ begin
         end;
         p_names[FileList.Count] := nil;
         gtk_selection_data_set_uris(SelData, p_names);
+        g_strfreev(p_names)
       end;
       FileList.Free;
     end;

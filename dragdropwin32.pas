@@ -102,6 +102,7 @@ type
   TDataObject = class(TInterfacedObject, IDataObject)
   public
     constructor Create(Src: TNativeDragSource);
+    destructor Destroy; override;
     function GetData(const formatetcIn: FORMATETC; out medium: STGMEDIUM): HRESULT; STDCALL;
     function GetDataHere(const pformatetc: FormatETC; out medium: STGMEDIUM): HRESULT; STDCALL;
     function QueryGetData(const pformatetc: FORMATETC): HRESULT; STDCALL;
@@ -113,9 +114,11 @@ type
     function EnumDAdvise(out enumAdvise: IEnumStatData): HResult; StdCall;
   private
     FSrc: TNativeDragSource;
+    FFileList: TStringList;
     FFmtList: array of FORMATETC;
     function HaveThisFormat(const AFmt: TFORMATETC): Boolean;
     procedure AddFormat(Fmt: FORMATETC);
+    function GetSrcFileList: TStringList;
   end;
 
 {$note SHCreateStdEnumFmtEtc() definition in shlobj is wrong, report this bug}
@@ -139,6 +142,7 @@ constructor TDataObject.Create(Src: TNativeDragSource);
 begin
   inherited Create;
   FSrc := Src;
+  FFileList := nil;
   if Assigned(Src.OnDragGetFileList) then begin
     AddFormat(TGT_FILELIST);
   end;
@@ -146,6 +150,13 @@ begin
     AddFormat(TGT_UNICODETEXT);
     AddFormat(TGT_TEXT);
   end;
+end;
+
+destructor TDataObject.Destroy;
+begin
+  if Assigned(FFileList) then
+    FreeAndNil(FFileList);
+  inherited Destroy;
 end;
 
 function TDataObject.GetData(const formatetcIn: FORMATETC; out medium: STGMEDIUM): HRESULT; STDCALL;
@@ -181,7 +192,7 @@ begin
     case formatetcIn.CfFormat of
       CF_HDROP:
       begin
-        FileList := FSrc.CallOnDragGetFileList;
+        FileList := GetSrcFileList;
 
         // First we need a widestring #0 sepatated and #0#0 at the end.
         WideStringData := '';
@@ -313,6 +324,15 @@ begin
   I := Length(FFmtList);
   SetLength(FFmtList, I + 1);
   FFmtList[I] := Fmt;
+end;
+
+function TDataObject.GetSrcFileList: TStringList;
+begin
+  if not Assigned(FFileList) then begin
+    FFileList := TStringList.Create;
+    FSrc.CallOnDragGetFileList(FFileList);
+  end;
+  Result := FFileList;
 end;
 
 { TDragSource }

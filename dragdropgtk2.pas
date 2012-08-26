@@ -94,17 +94,18 @@ begin
 
     FMT_FILELIST:
     begin
-      FileList := Src.CallOnDragGetFileList;
+      FileList := TStringList.Create;
+      Src.CallOnDragGetFileList(FileList);
       if FileList.Count > 0 then begin
         SetLength(A, FileList.Count);
         for I := 0 to FileList.Count - 1 do begin
-          if LeftStr(FileList.Strings[I], 7) <> 'file://' then
-            FileList.Strings[I] := 'file://' + FileList.Strings[i];
+          FileList.Strings[I] := 'file://' + FileList.Strings[i];
           A[i] := PChar(FileList.Strings[I]);
         end;
         A[FileList.Count] := nil;
         gtk_selection_data_set_uris(SelData, @A[0]);
       end;
+      FileList.Free;
     end;
   end;
 end;

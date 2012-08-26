@@ -88,7 +88,8 @@ begin
   end;
 
   if Assigned(Src.OnDragGetFileList) then begin
-    FileList := Src.CallOnDragGetFileList;
+    FileList := TStringList.Create;
+    Src.CallOnDragGetFileList(FileList);
     if FileList.Count > 0 then begin
       // we don't have QMimeData_setUrls() in libQt4Pas
       // unfortunately, so we must fiddle around with the
@@ -101,6 +102,7 @@ begin
       MimeName := 'text/uri-list';
       QMimeData_setData(MimeObj, @MimeName, ByteArray);
     end;
+    FileList.Free;
   end;
 
   if Assigned(Mime) then begin

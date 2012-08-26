@@ -83,7 +83,6 @@ type
     FOldMouseMove: TMouseMoveEvent;
     FMouseDownPos: TPoint;
     FIsDragging: Boolean;
-    FFileListCache: TStringList;
     procedure UnsetControl;
     procedure SetControl(AControl: TWinControl);
     procedure MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -94,7 +93,7 @@ type
     InternalData: TObject; // widgetset code may store internal stuff here
     procedure CallOnDragBegin;
     procedure CallOnDragEnd;
-    function CallOnDragGetFileList: TStringList;
+    procedure CallOnDragGetFileList(FileList: TStringList);
     procedure CallOnDragStringData(out StringData: UTF8String);
     property IsDragging: Boolean read FIsDragging;
   published
@@ -128,7 +127,6 @@ begin
   FEndEvent := nil;
   FMouseDownPos := Point(-1, -1);
   FIsDragging := False;
-  FFileListCache := nil;
 end;
 
 procedure TNativeDragSource.UnsetControl;
@@ -204,14 +202,10 @@ begin
     OnDragBegin(Control, FMouseDownPos.X, FMouseDownPos.Y);
 end;
 
-function TNativeDragSource.CallOnDragGetFileList: TStringList;
+procedure TNativeDragSource.CallOnDragGetFileList(FileList: TStringList);
 begin
-  if not Assigned(FFileListCache) then begin
-    FFileListCache := TStringList.Create;
-    if Assigned(OnDragGetFileList) then
-      OnDragGetFileList(Control, FFileListCache);
-  end;
-  Result := FFileListCache;
+  if Assigned(OnDragGetFileList) then
+    OnDragGetFileList(Control, FileList);
 end;
 
 procedure TNativeDragSource.CallOnDragStringData(out StringData: UTF8String);
@@ -225,10 +219,6 @@ begin
   FIsDragging := False;
   if Assigned(OnDragEnd) then
     OnDragEnd(Control);
-  if Assigned(FFileListCache) then begin
-    FFileListCache.Free;
-    FFileListCache := nil;
-  end;
 end;
 
 procedure Register;

@@ -9,9 +9,10 @@ The license is LGPL with static linking exception, so it can be used like
 any other LCL component or maybe one day even included in Lazarus itself.
 
 Currently implemented widgetsets:
-  * Gtk2
-  * Win32
-  * Qt4
+
+ * Gtk2
+ * Win32
+ * Qt4
 
 Usage
 -----

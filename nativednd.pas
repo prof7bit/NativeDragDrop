@@ -62,9 +62,7 @@ uses
   Classes,
   Controls;
 
-
 type
-
   TDragBeginEvent = procedure(Sender: TObject; MouseX, MouseY: Integer) of object;
   TDragFileListEvent = procedure(Sender: TObject; FileList: TStringList) of object;
   TDragStringDataEvent = procedure(Sender: TObject; out StringData: UTF8String) of object;
@@ -105,16 +103,13 @@ type
     property OnDragEnd: TNotifyEvent read FEndEvent write FEndEvent;
   end;
 
-procedure Register;
-
 implementation
 uses
   DragDropDummy,
   {$ifdef LCLGTK2}DragDropGtk2,{$endif}
   {$ifdef LCLWIN32}DragDropWin32,{$endif}
   {$ifdef LCLQT}DragDropQt4,{$endif}
-  typinfo,
-  LResources;
+  typinfo;
 
 { TNativeDragSource }
 
@@ -231,12 +226,5 @@ begin
     OnDragEnd(Control);
 end;
 
-procedure Register;
-begin
-  RegisterComponents('System', [TNativeDragSource]);
-end;
-
-initialization
-  {$i nativednd.lrs}
 end.
 

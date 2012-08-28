@@ -2,20 +2,20 @@
   This source is only used to compile and install the package.
  }
 
-unit nativedragdrop;
+unit NativeDragDrop;
 
 interface
 
 uses
-  NativeDnD, LazarusPackageIntf;
+  NativeDnD, nativedragdrop_reg, LazarusPackageIntf;
 
 implementation
 
 procedure Register;
 begin
-  RegisterUnit('NativeDnD', @NativeDnD.Register);
+  RegisterUnit('nativedragdrop_reg', @nativedragdrop_reg.Register);
 end;
 
 initialization
-  RegisterPackage('nativedragdrop', @Register);
+  RegisterPackage('NativeDragDrop', @Register);
 end.

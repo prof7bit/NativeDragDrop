@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <CONFIG>
   <Package Version="4">
-    <Name Value="nativedragdrop"/>
+    <Name Value="NativeDragDrop"/>
+    <Author Value="Bernd Kreuss &lt;prof7bit@gmail.com>"/>
     <CompilerOptions>
       <Version Value="11"/>
       <SearchPaths>
@@ -15,36 +16,44 @@
         <CompilerPath Value="$(CompPath)"/>
       </Other>
     </CompilerOptions>
-    <Files Count="6">
+    <Description Value="Drag text and files to other applications using the native platform protocols"/>
+    <License Value="LGPL 2"/>
+    <Version Major="1"/>
+    <Files Count="7">
       <Item1>
         <Filename Value="nativednd.pas"/>
-        <HasRegisterProc Value="True"/>
         <UnitName Value="NativeDnD"/>
       </Item1>
       <Item2>
-        <Filename Value="nativednd.lrs"/>
-        <Type Value="LRS"/>
-      </Item2>
-      <Item3>
         <Filename Value="dragdropdummy.pas"/>
         <AddToUsesPkgSection Value="False"/>
         <UnitName Value="DragDropDummy"/>
-      </Item3>
-      <Item4>
+      </Item2>
+      <Item3>
         <Filename Value="dragdropgtk2.pas"/>
         <AddToUsesPkgSection Value="False"/>
         <UnitName Value="DragDropGtk2"/>
-      </Item4>
-      <Item5>
+      </Item3>
+      <Item4>
         <Filename Value="dragdropwin32.pas"/>
         <AddToUsesPkgSection Value="False"/>
         <UnitName Value="DragDropWin32"/>
-      </Item5>
-      <Item6>
+      </Item4>
+      <Item5>
         <Filename Value="dragdropqt4.pas"/>
         <AddToUsesPkgSection Value="False"/>
         <UnitName Value="DragDropQt4"/>
+      </Item5>
+      <Item6>
+        <Filename Value="tnativedragsource.lrs"/>
+        <Type Value="LRS"/>
       </Item6>
+      <Item7>
+        <Filename Value="nativedragdrop_reg.pas"/>
+        <HasRegisterProc Value="True"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="nativedragdrop_reg"/>
+      </Item7>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="1">

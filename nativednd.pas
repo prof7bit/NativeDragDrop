@@ -138,6 +138,8 @@ end;
 
 procedure TNativeDragSource.SetControl(AControl: TWinControl);
 begin
+  if csDesigning in ComponentState then
+    exit;
   if FControl = AControl then
     exit;
   if Assigned(FControl) then
@@ -184,8 +186,6 @@ end;
 
 procedure TNativeDragSource.InstallMouseRedirection;
 begin
-  if csDesigning in ComponentState then
-    exit;
   if DRAG_SOURCE_IMPLEMENTED then begin
     FOldMouseDown := TMouseEvent(GetMethodProp(Control, 'OnMouseDown'));
     FOldMouseMove := TMouseMoveEvent(GetMethodProp(Control, 'OnMouseMove'));
@@ -196,8 +196,6 @@ end;
 
 procedure TNativeDragSource.UninstallMouseRedirection;
 begin
-  if csDesigning in ComponentState then
-    exit;
   if DRAG_SOURCE_IMPLEMENTED then begin
     SetMethodProp(Control, 'OnMouseMove', TMethod(FOldMouseMove));
     SetMethodProp(Control, 'OnMouseDown', TMethod(FOldMouseDown));

@@ -107,7 +107,7 @@ type
     function GetDataHere(const pformatetc: FormatETC; out medium: STGMEDIUM): HRESULT; STDCALL;
     function QueryGetData(const pformatetc: FORMATETC): HRESULT; STDCALL;
     function GetCanonicalFormatEtc(const pformatetcIn: FORMATETC; out pformatetcOut: FORMATETC): HResult; STDCALl;
-    function SetData(const pformatetc: FORMATETC; const medium: STGMEDIUM; FRelease: BOOL): HRESULT; StdCall;
+    function SetData(const pformatetc: FORMATETC; var medium: STGMEDIUM; FRelease: BOOL): HRESULT; StdCall;
     function EnumFormatEtc(dwDirection: DWord; out enumformatetcpara: IENUMFORMATETC): HRESULT; StdCall;
     function DAdvise(const formatetc: FORMATETC; advf: DWORD; const AdvSink: IAdviseSink; out dwConnection: DWORD): HRESULT; StdCall;
     function DUnadvise(dwconnection: DWord): HRESULT; StdCall;
@@ -274,7 +274,7 @@ function TDataObject.GetCanonicalFormatEtc(const pformatetcIn: FORMATETC; out pf
 begin
 end;
 
-function TDataObject.SetData(const pformatetc: FORMATETC; const medium: STGMEDIUM; FRelease: BOOL): HRESULT; StdCall;
+function TDataObject.SetData(const pformatetc: FORMATETC; var medium: STGMEDIUM; FRelease: BOOL): HRESULT; StdCall;
 begin
 end;
 
